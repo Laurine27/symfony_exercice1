@@ -1,3 +1,7 @@
-body {
-    background-color: skyblue;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.form-width {
+    width: 600px;
 }

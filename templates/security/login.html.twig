@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+    <form method="post" class="form-width max-w-sm mx-auto mt-8 space-y-6">
+        {% if error %}
+            <div class="text-red-600 text-sm">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+        {% endif %}
+
+        {% if app.user %}
+            <div class="mb-3 text-sm text-gray-600">
+                You are logged in as {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}" class="text-indigo-600 hover:underline">Logout</a>
+            </div>
+        {% endif %}
+
+        <h1 class="text-2xl font-semibold text-center mb-6">Connectez-vous !</h1>
+
+        <div class="space-y-4">
+            <div>
+                <label for="inputEmail" class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" autocomplete="email" required autofocus>
+            </div>
+
+            <div>
+                <label for="inputPassword" class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" name="password" id="inputPassword" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500" autocomplete="current-password" required>
+            </div>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+            <button type="submit" class="w-full py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                Se connecter
+            </button>
+        </div>
+    </form>
+{% endblock %}

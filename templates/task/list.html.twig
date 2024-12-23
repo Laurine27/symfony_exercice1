@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Tâches{% endblock %}
+
+{% block body %}
+    <div class="relative">
+        <div class="absolute top-0 right-0 mt-4 mr-4">
+            {% if app.user %}
+                {{ app.user.email }}
+                <a href="{{ path('app_logout') }}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">Se déconnecter</a>
+            {% else %}
+                <a href="{{ path('app_login') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Se connecter</a>
+            {% endif %}
+        </div>
+
+        <div class="container mx-auto px-4 py-6">
+            <h1 class="text-2xl font-bold mb-4">Liste des Tâches</h1>
+
+            <a href="{{ path('task_create') }}" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">Créer une nouvelle tâche</a>
+
+            <div class="mt-6">
+                <table class="min-w-full table-auto">
+                    <thead>
+                    <tr>
+                        <th class="px-4 py-2 text-left border">Nom</th>
+                        <th class="px-4 py-2 text-left border">Description</th>
+                        <th class="px-4 py-2 text-left border">Créée le</th>
+                        <th class="px-4 py-2 text-left border">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for task in tasks %}
+                        <tr class="border-b">
+                            <td class="px-4 py-2">
+                                <a href="{{ path('task_view', { 'id': task.id }) }}" class="text-blue-500 hover:text-blue-700">{{ task.name }}</a>
+                            </td>
+                            <td class="px-4 py-2">{{ task.description }}</td>
+                            <td class="px-4 py-2">{{ task.createdAt|date('d/m/Y') }}</td>
+                            <td class="px-4 py-2 flex space-x-2">
+                                <a href="{{ path('task_edit', { 'id': task.id }) }}" class="text-yellow-500 hover:text-yellow-700">Modifier</a>
+                                <form action="{{ path('task_delete', { 'id': task.id }) }}" method="POST" style="display:inline;">
+                                    <button type="submit" class="text-red-500 hover:text-red-700">Supprimer</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="4" class="px-4 py-2 text-center text-gray-500">Aucune tâche disponible.</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

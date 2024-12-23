@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la tâche : {{ task.name }}{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto px-4 py-6 relative">
+        <div class="absolute top-0 right-0 mt-4 mr-4">
+            {% if is_granted('edit', task) %}
+                <a href="{{ path('task_edit', { 'id': task.id }) }}" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-700">Modifier</a>
+            {% endif %}
+
+            {% if is_granted('delete', task) %}
+                <a href="{{ path('task_delete', { 'id': task.id }) }}" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">Supprimer</a>
+            {% endif %}
+        </div>
+
+        <h1 class="text-2xl font-bold mb-4">{{ task.name }}</h1>
+        <p class="text-gray-700 mb-4">{{ task.description }}</p>
+        <p class="text-sm text-gray-500">Créée le {{ task.createdAt|date('d/m/Y') }}</p>
+
+        <a href="{{ path('task_index') }}" class="bg-gray-300 text-gray-700 px-4 py-2 rounded hover:bg-gray-400 mt-4 inline-block">Retour à la liste</a>
+    </div>
+{% endblock %}
