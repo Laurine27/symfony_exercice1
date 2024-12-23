@@ -6,6 +6,7 @@ use App\Entity\Task;
 use App\Form\TaskType;
 use App\Repository\TaskRepository;
 use App\Security\Voter\TaskVoter;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TaskController extends AbstractController
 {
-    public function __construct(private EntityManagerInterface $entityManager)
+    public function __construct(private readonly EntityManagerInterface $entityManager)
     {
     }
 
@@ -34,8 +35,8 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $task->setCreatedAt(new \DateTimeImmutable());
-            $task->setUpdatedAt(new \DateTimeImmutable());
+            $task->setCreatedAt(new DateTimeImmutable());
+            $task->setUpdatedAt(new DateTimeImmutable());
             $task->setAuthor($this->getUser());
             $this->entityManager->persist($task);
             $this->entityManager->flush();
@@ -60,7 +61,7 @@ class TaskController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $task->setUpdatedAt(new \DateTimeImmutable());
+            $task->setUpdatedAt(new DateTimeImmutable());
             $this->entityManager->flush();
             return $this->redirectToRoute('task_index');
         }

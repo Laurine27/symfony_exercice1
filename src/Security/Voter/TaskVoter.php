@@ -17,12 +17,10 @@ class TaskVoter extends Voter
 
     protected function supports(string $attribute, $subject): bool
     {
-        // Vérifie si l'attribut est valide pour cette entité
         if (!in_array($attribute, [self::VIEW, self::EDIT, self::DELETE])) {
             return false;
         }
 
-        // Vérifie si le sujet est une instance de Task
         if (!$subject instanceof Task) {
             return false;
         }
@@ -34,23 +32,18 @@ class TaskVoter extends Voter
     {
         $user = $token->getUser();
 
-        // Vérifie si l'utilisateur est connecté
         if (!$user instanceof UserInterface) {
             return false;
         }
 
-        // Vérifie les droits d'accès selon l'attribut
         switch ($attribute) {
             case self::VIEW:
-                // Un utilisateur peut voir la tâche s'il est l'auteur ou un administrateur
                 return $this->canView($task, $user);
 
             case self::EDIT:
-                // Seul l'auteur ou un administrateur peut éditer la tâche
                 return $this->canEdit($task, $user);
 
             case self::DELETE:
-                // Un administrateur peut supprimer la tâche
                 return $this->canDelete($user);
         }
 
@@ -59,19 +52,21 @@ class TaskVoter extends Voter
 
     private function canView(Task $task, UserInterface $user): bool
     {
-        // L'utilisateur peut voir la tâche s'il en est l'auteur ou si il est administrateur
+        // L'utilisateur peut voir la tâche s'il en est l'auteur
+        // L'administrateur peut voir toutes les tâches
         return $task->getAuthor() === $user || in_array('ROLE_ADMIN', $user->getRoles());
     }
 
     private function canEdit(Task $task, UserInterface $user): bool
     {
-        // L'utilisateur peut éditer la tâche s'il en est l'auteur ou un administrateur
+        // Un utilisateur peut éditer la tâche s'il en est l'auteur
+        // Un administrateur peut modifier n'importe quelle tâche
         return $task->getAuthor() === $user || in_array('ROLE_ADMIN', $user->getRoles());
     }
 
     private function canDelete(UserInterface $user): bool
     {
-        // Seul un administrateur peut supprimer la tâche
+        // Seul un administrateur peut supprimer une tâche
         return in_array('ROLE_ADMIN', $user->getRoles());
     }
 }
