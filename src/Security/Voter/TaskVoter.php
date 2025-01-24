@@ -63,7 +63,6 @@ class TaskVoter extends Voter
         // Un administrateur peut modifier n'importe quelle tâche
         return $task->getAuthor() === $user || in_array('ROLE_ADMIN', $user->getRoles());
     }
-
     private function canDelete(UserInterface $user): bool
     {
         // Seul un administrateur peut supprimer une tâche
